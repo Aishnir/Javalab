@@ -1,0 +1,135 @@
+package CIE;
+
+import java.util.Scanner;
+
+public class Student {
+    protected String usn;
+    protected String name;
+    protected int sem;
+
+    // Method to input student details
+    public void inputStudentDetails() {
+        Scanner s = new Scanner(System.in);
+        System.out.print("Enter USN: ");
+        this.usn = s.nextLine();
+        System.out.print("Enter Name: ");
+        this.name = s.nextLine();
+        System.out.print("Enter Semester: ");
+        this.sem = s.nextInt();
+    }
+
+    // Method to display student details
+    public void displayStudentDetails() {
+        System.out.println("USN: " + usn);
+        System.out.println("Name: " + name);
+        System.out.println("Semester: " + sem);
+    }
+}
+// File: CIE/Internals.java
+package CIE;
+
+import java.util.Scanner;
+
+public class Internals extends Student {
+    protected int marks[] = new int[5];  // Array to store internal marks for 5 courses
+
+    // Method to input internal marks
+    public void inputCIEmarks() {
+        Scanner s = new Scanner(System.in);
+        System.out.println("Enter Internal Marks for 5 courses: ");
+        for (int i = 0; i < 5; i++) {
+            System.out.print("Course " + (i + 1) + ": ");
+            marks[i] = s.nextInt();
+        }
+    }
+
+    // Method to display internal marks
+    public void displayCIEmarks() {
+        System.out.println("Internal Marks: ");
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Course " + (i + 1) + ": " + marks[i]);
+        }
+    }
+}
+// File: SEE/Externals.java
+package SEE;
+
+import CIE.Internals;  // Import Internals class from CIE package
+import java.util.Scanner;
+
+public class Externals extends Internals {
+    protected int externalMarks[] = new int[5];  // Array to store external marks for 5 courses
+    protected int finalMarks[] = new int[5];     // Array to store final marks (sum of internal and external)
+
+    // Constructor to initialize arrays
+    public Externals() {
+        externalMarks = new int[5];
+        finalMarks = new int[5];
+    }
+
+    // Method to input external marks
+    public void inputSEEmarks() {
+        Scanner s = new Scanner(System.in);
+        System.out.println("Enter External Marks for 5 courses: ");
+        for (int i = 0; i < 5; i++) {
+            System.out.print("Course " + (i + 1) + ": ");
+            externalMarks[i] = s.nextInt();
+        }
+    }
+
+    // Method to calculate final marks (sum of internal and external)
+    public void calculateFinalMarks() {
+        for (int i = 0; i < 5; i++) {
+            finalMarks[i] = marks[i] + externalMarks[i];  // Internal + External
+        }
+    }
+
+    // Method to display final marks
+    public void displayFinalMarks() {
+        displayStudentDetails();  // Display student details (from parent class)
+        displayCIEmarks();        // Display internal marks (from parent class)
+       
+        System.out.println("External Marks: ");
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Course " + (i + 1) + ": " + externalMarks[i]);
+        }
+
+        System.out.println("Final Marks: ");
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Course " + (i + 1) + ": " + finalMarks[i]);
+        }
+    }
+}
+// File: Main.java
+import SEE.Externals;  // Import Externals class from SEE package
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+       
+        System.out.print("Enter number of students: ");
+        int n = sc.nextInt();
+       
+        // Array to store student data
+        Externals[] students = new Externals[n];
+       
+        // Loop to input data for each student
+        for (int i = 0; i < n; i++) {
+            students[i] = new Externals();
+           
+            // Input student details, internal marks, and external marks
+            students[i].inputStudentDetails();
+            students[i].inputCIEmarks();
+            students[i].inputSEEmarks();
+            students[i].calculateFinalMarks();
+        }
+       
+        // Display the final results of all students
+        for (int i = 0; i < n; i++) {
+            students[i].displayFinalMarks();
+            System.out.println("--------------------------------------------");
+        }
+    }
+}
